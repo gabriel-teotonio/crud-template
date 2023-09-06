@@ -1,22 +1,32 @@
+import { useForm } from "react-hook-form";
 import "./styles.css";
+import { api } from "../../lib/axio";
 
-export function Form() {
+export function Form({ title, textButton }) {
+
+  const { register, handleSubmit } = useForm()
+
+  const handleCreatePost = (data) => {
+    api.post("/posts", data)
+    console.log(data)
+  }
+
   return (
-    <form>
-      <h2>Título</h2>
+    <form onSubmit={handleSubmit(handleCreatePost)}>
+      <h2>{title}</h2>
       <div className="field">
-        <input placeholder="Título" />
+        <input placeholder="Título" {...register("title")}/>
       </div>
 
       <div className="field">
-        <input placeholder="Descrição" />
+        <input placeholder="Descrição" {...register("description")}/>
       </div>
 
       <div className="field">
-        <textarea placeholder="Descrição" />
+        <textarea placeholder="Conteúdo" {...register("content")}/>
       </div>
 
-      <button>Botão</button>
+      <button type="submit">{textButton}</button>
     </form>
   );
 }
