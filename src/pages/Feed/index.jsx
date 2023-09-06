@@ -14,6 +14,11 @@ export function Feed() {
       .catch((err) => console.log(err, "erro na requisição"))
     }, [])
     
+    const handleDeletePost = (id) => {
+      api.delete(`/posts/${id}`)
+      setPosts(posts.filter(post => post.id !== id))
+      console.log("exluido com sucesso!")
+    }
     
   return (
     <div className="feedContainer">
@@ -21,7 +26,11 @@ export function Feed() {
         posts.length <= 0 ? (<p>Nenhum post publicado</p>)
         :(
           posts.map((post) => (
-            <Card key={post.id} post={post}/>
+            <Card 
+            key={post.id} 
+            post={post} 
+            onDeletePost={handleDeletePost}
+            />
           ))
         )
       }
