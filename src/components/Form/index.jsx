@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import "./styles.css";
-import { api } from "../../lib/axio";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { api } from "../../lib/axio";
+import { useEffect } from "react";
 
 const postSchema = yup.object({
   title: yup.string().required("preecha o campo título"),
@@ -11,34 +12,37 @@ const postSchema = yup.object({
   content: yup.string().required("preencha o campo conteudo"),
 })
 
-export function Form({ title, textButton }) {
-  const navigate = useNavigate()
-  const { register, handleSubmit, formState:{errors} } = useForm({
+export function Form({ title, textButton, onAction }) {
+  const { id } = useParams()
+  const { register, handleSubmit, reset, formState:{errors} } = useForm({
     resolver: yupResolver(postSchema)
   })
 
-  const handleCreatePost = (data) => {
-    api.post("/posts", data)
-    navigate("/")
-    console.log("criado com sucesso!")
+  const getDataUpdate = async () => {
+    const response = await api.get(`/posts/${id}`)
+    reset(response.data)
   }
 
+  useEffect(() => {
+    getDataUpdate()
+  },[])
+
   return (
-    <form onSubmit={handleSubmit(handleCreatePost)}>
+    <form onSubmit={handleSubmit(onAction)}>
       <h2>{title}</h2>
       <div className="field">
         <input placeholder="Título" {...register("title")}/>
-        {errors.title?.message}
+        <span>{errors.title?.message}</span>
       </div>
 
       <div className="field">
         <input placeholder="Descrição" {...register("description")}/>
-        {errors.description?.message}
+        <span>{errors.description?.message}</span>
       </div>
 
       <div className="field">
         <textarea placeholder="Conteúdo" {...register("content")}/>
-        {errors.content?.message}
+        <span>{errors.content?.message}</span>
       </div>
 
       <button type="submit">{textButton}</button>

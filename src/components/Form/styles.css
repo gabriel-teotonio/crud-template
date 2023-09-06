@@ -13,3 +13,8 @@ form div input, textarea{
     padding: 0 2rem;
     resize: none;
 }
+
+form div span{
+    color: rgb(255, 74, 74);
+    font-size: 14px;
+}
