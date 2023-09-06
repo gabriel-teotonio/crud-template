@@ -14,7 +14,7 @@ export function Card({ post, onDeletePost }) {
       <p>{post.description}</p>
 
       <div className="buttonsContainer">
-        <button>Ver publicação</button>
+        <button onClick={() => navigate(`/post/${post.id}`)}>Ver publicação</button>
         <button onClick={() => navigate(`/updatePost/${post.id}`)}>Atualizar</button>
       </div>
     </article>

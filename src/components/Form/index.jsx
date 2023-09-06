@@ -19,12 +19,16 @@ export function Form({ title, textButton, onAction }) {
   })
 
   const getDataUpdate = async () => {
-    const response = await api.get(`/posts/${id}`)
-    reset(response.data)
+    try {
+      const response = await api.get(`/posts/${id}`)
+      reset(response.data)
+    } catch (error) {
+      console.log("erro na requisição", error)
+    }
   }
 
   useEffect(() => {
-    getDataUpdate()
+    if(!!id) getDataUpdate()
   },[])
 
   return (
